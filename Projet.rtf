@@ -1,0 +1,224 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang3084{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset0 Courier;}{\f2\fnil\fcharset1 Segoe UI Symbol;}}
+{\colortbl ;\red0\green0\blue255;\red192\green192\blue192;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\qc\b\f0\fs32\lang12 Projet Windows Server pour Savard International Illimited\b0\fs22\par
+
+\pard\sa200\sl276\slmult1\par
+\b\fs32 ERIC FOURMAUX\b0\fs22\par
+\b\fs28 TP: 00Q5\b0\fs22\par
+\b\fs32 Nom du professeur : Jean-Fran\'e7ois Savard\b0\fs22\par
+\fs28 Date de remise: Avril 2025\fs22\par
+\par
+\par
+\par
+\b\fs28 Table des mati\'e8res\b0\fs22\par
+1- Introduction\par
+2- Objectifs du projet\par
+3- \'c9tapes de la r\'e9alisation\par
+4- Structure de l\rquote Active Directory\par
+5- Structure des r\'e9pertoires et droits d\rquote acc\'e8s\par
+6- GPO mises en place\par
+7- Justification des choix\par
+8- Conclusion\par
+9- Annexes (Scripts PowerShell, Structure AD, etc.)\par
+\par
+\par
+\b\fs28 Glossaire:\b0\fs22\par
+\b AD\b0 : Active Directory\par
+\b OU\b0 : Organizational Unit - Unit\'e9s Organisationnelle\par
+\b GPO\b0 : Group Policy Object - Politique de groupe\par
+\par
+\par
+\b\fs28 1. Introduction\b0\fs22\par
+\par
+Savard International Illimited est une entreprise qui offre des services de conseil aux entreprises. Pour ce projet, j'ai pour mandat d\rquote installer un environnement Windows Server avec Active Directory, en respectant les besoins sp\'e9cifiques de l\rquote entreprise, tels que la s\'e9curit\'e9, l\rquote organisation des donn\'e9es, et la gestion des utilisateurs.\par
+\par
+\b\fs28 2. Objectifs du projet\b0\fs22\par
+\par
+- Installer un domaine Active Directory sur Windows Server Core 2022\par
+- Ajouter un poste client Windows 10 au domaine\par
+- Organiser les utilisateurs par d\'e9partement\par
+- Mettre en place les GPO pour la s\'e9curit\'e9 et la gestion des mots de passe\par
+- D\'e9finir des droits d\rquote acc\'e8s sur des dossiers partag\'e9s\par
+\par
+\b\fs28 3. \'c9tapes de la r\'e9alisation\b0\fs22\par
+\par
+- Cr\'e9ation des machines virtuelles dans VirtualBox (Server Core 2022 et Windows 10)\par
+- Configuration du r\'e9seau (mode r\'e9seau interne)\par
+- Installation et promotion du contr\'f4leur de domaine\par
+- Ajout du client Windows 10 au domaine\par
+- Cr\'e9ation des OU et des utilisateurs avec PowerShell\par
+- Mise en place des GPO\par
+- Partage de dossiers et gestion des droits d\rquote acc\'e8s\par
+- Tests et v\'e9rification\par
+\par
+\b\fs28 4. Structure de l\rquote Active Directory\b0\fs22\par
+\par
+\ul Nom de domaine \ulnone : \b savard.local\b0\par
+\ul OU (Unit\'e9s d\rquote organisation) :\ulnone\par
+VentesMarketing\par
+RechercheDeveloppement\par
+Finance\par
+TechnologiesInformation\par
+Sondages\par
+Direction\par
+\par
+\ul Chaque OU contient :\ulnone\par
+Un chef d\rquote\'e9quipe (ex: chefvente)\par
+Les employ\'e9s du d\'e9partement (ex: employevente1 \'e0 employevente5)\par
+\par
+\b\fs32 5. Structure des r\'e9pertoires et droits d\rquote acc\'e8s\b0\fs22\par
+\par
+Dossiers partag\'e9s sur le serveur :\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\ventes"}}{\fldrslt{\\\\srv-ad\\partage\\ventes\ul0\cf0}}}}\f0\fs22  : Acc\'e8s total pour VentesMarketing\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\finance"}}{\fldrslt{\\\\srv-ad\\partage\\finance\ul0\cf0}}}}\f0\fs22  : Acc\'e8s Finance uniquement\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\sondages"}}{\fldrslt{\\\\srv-ad\\partage\\sondages\ul0\cf0}}}}\f0\fs22  : \'c9criture Sondages, lecture R-D\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\direction"}}{\fldrslt{\\\\srv-ad\\partage\\direction\ul0\cf0}}}}\f0\fs22  : Direction seulement\par
+\par
+\b\fs28 6. GPO mises en place\b0\fs22\par
+\par
+Mot de passe expire aux 21 jours\par
+R\'e9utilisation des 10 derniers interdite\par
+Longueur minimale : 8 caract\'e8res (9 pour Finance et R-D)\par
+Compte verrouill\'e9 apr\'e8s 3 tentatives infructueuses\par
+\par
+\b\fs28 7. Justification des choix\b0\fs22\par
+\par
+Les OU permettent de mieux g\'e9rer les GPO par d\'e9partement.\par
+Les restrictions sur les mots de passe renforcent la s\'e9curit\'e9 des donn\'e9es sensibles.\par
+L\rquote utilisation de Windows Server Core est plus s\'fbre et l\'e9g\'e8re pour un r\'f4le de contr\'f4leur de domaine.\par
+\par
+\b\fs28 8. Conclusion\b0\fs22\par
+\par
+Ce projet m\rquote a permis d\rquote apprendre \'e0 d\'e9ployer un environnement Active Directory de fa\'e7on professionnelle, avec gestion des utilisateurs, des partages et de la s\'e9curit\'e9 r\'e9seau. Toutes les exigences de l\rquote entreprise ont \'e9t\'e9 respect\'e9es.\par
+\par
+\b\fs28 9. Annexes\b0\fs22\par
+\par
+
+\pard\sa200\sl276\slmult1\qc\b Scripts PowerShell de cr\'e9ation des OU et utilisateurs\par
+
+\pard\sa200\sl276\slmult1\ul\b0 Cr\'e9ation des OU principales:\ulnone\par
+\f1\fs20 New-ADOrganizationalUnit -Name "VentesMarketing" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "RechercheDeveloppement" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "Finance" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "TechnologiesInformation" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "Sondages" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "Direction" -Path "DC=savard,DC=local"\par
+\par
+\ul\f0\fs22 Cr\'e9ation des utilisateurs par d\'e9partement:\par
+\ulnone\b Note: \b0 Chaque utilisateur est cr\'e9\'e9 avec un mot de passe temporaire \highlight2 P@ssword123\highlight0 , qu'il devra changer \'e0 la premi\'e8re connexion.\par
+\f1\fs20 # Fonction pour cr\'e9er un utilisateur\par
+function Create-User \{\par
+    param (\par
+        [string]$Name,\par
+        [string]$OU\par
+    )\par
+    $Password = ConvertTo-SecureString "P@ssword1" -AsPlainText -Force\par
+    New-ADUser -Name $Name `\par
+        -SamAccountName $Name `\par
+        -UserPrincipalName "$Name@savard.local" `\par
+        -Path "OU=$OU,DC=savard,DC=local" `\par
+        -AccountPassword $Password `\par
+        -Enabled $true `\par
+        -ChangePasswordAtLogon $true\par
+\}\par
+\par
+# Ventes et Marketing\par
+Create-User "chefventes" "VentesMarketing"\par
+1..5 | ForEach-Object \{ Create-User "employeventes$_" "VentesMarketing" \}\par
+\par
+# Recherche et D\'e9veloppement\par
+Create-User "chefrd" "RechercheDeveloppement"\par
+1..10 | ForEach-Object \{ Create-User "employeerd$_" "RechercheDeveloppement" \}\par
+\par
+# Finance\par
+Create-User "cheffinance" "Finance"\par
+1..3 | ForEach-Object \{ Create-User "commisfinance$_" "Finance" \}\par
+Create-User "preposepaye" "Finance"\par
+\par
+# TI\par
+Create-User "chefti" "TechnologiesInformation"\par
+Create-User "analysteti" "TechnologiesInformation"\par
+1..2 | ForEach-Object \{ Create-User "techsupport$_" "TechnologiesInformation" \}\par
+\par
+# Sondages\par
+Create-User "chefsondages" "Sondages"\par
+1..10 | ForEach-Object \{ Create-User "telephoniste$_" "Sondages" \}\par
+\par
+# Direction\par
+Create-User "directeur" "Direction"\par
+Create-User "adjointeadmin" "Direction"\par
+Create-User "receptionniste" "Direction"\par
+1..3 | ForEach-Object \{ Create-User "secretaire$_" "Direction" \}\par
+\par
+\ul\f0\fs22 Exemple de cr\'e9ation de groupe de s\'e9curit\'e9 par d\'e9partement et ajout de membres:\par
+\ulnone\f1\fs20\par
+New-ADGroup -Name "G_Ventes" -GroupScope Global -Path "OU=VentesMarketing,DC=savard,DC=local"\par
+Add-ADGroupMember -Identity "G_Ventes" -Members chefventes, employeventes1, employeventes2, employeventes3, employeventes4, employeventes5\par
+\par
+# R\'e9p\'e9ter pour les autres d\'e9partements si d\'e9sir\'e9...\par
+\par
+
+\pard\sa200\sl276\slmult1\qc\b\f0\fs22 Sch\'e9ma de la structure AD\par
+\b0\par
+
+\pard\sl240\slmult1 Domaine : savard.local\par
+\f2\u9474?\f0\par
+\f2\u9500?\u9472?\u9472?\f0  OU : VentesMarketing\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefventes\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes1\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes2\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes3\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes4\par
+\f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : employeventes5\par
+\f2\u9474?\f0\par
+\f2\u9500?\u9472?\u9472?\f0  OU : RechercheDeveloppement\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefrd\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd1\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd2\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd3\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd4\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd5\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd6\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd7\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd8\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd9\par
+\f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : employeerd10\par
+\f2\u9474?\f0\par
+\f2\u9500?\u9472?\u9472?\f0  OU : Finance\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : cheffinance\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : commisfinance1\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : commisfinance2\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : commisfinance3\par
+\f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : preposepaye\par
+\f2\u9474?\f0\par
+\f2\u9500?\u9472?\u9472?\f0  OU : TechnologiesInformation\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefti\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : analysteti\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : techsupport1\par
+\f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : techsupport2\par
+\f2\u9474?\f0\par
+\f2\u9500?\u9472?\u9472?\f0  OU : Sondages\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefsondages\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste1\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste2\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste3\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste4\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste5\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste6\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste7\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste8\par
+\f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : telephoniste9\par
+\f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : telephoniste10\par
+\f2\u9474?\f0\par
+\f2\u9492?\u9472?\u9472?\f0  OU : Direction\par
+    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : directeur\par
+    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : adjointeadmin\par
+    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : receptionniste\par
+    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : secretaire1\par
+    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : secretaire2\par
+    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : secretaire3\par
+
+\pard\sa200\sl276\slmult1\qc\par
+}
+ 
