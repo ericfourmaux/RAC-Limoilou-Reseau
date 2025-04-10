@@ -45,6 +45,20 @@ Savard International Illimited est une entreprise qui offre des services de cons
 \par
 - Cr\'e9ation des machines virtuelles dans VirtualBox (Server Core 2022 et Windows 10)\par
 - Configuration du r\'e9seau (mode r\'e9seau interne)\par
+\tab\b Machine Serveur (Windows Server Core 2022):\b0   \par
+\tab\tab IP: 192.168.1.10\par
+\tab\tab Masque r\'e9seau: 255.255.255.0\par
+\tab\tab Passerelle: 192.168.1.1\par
+\tab\tab DNS: 192.168.1.10 (lui-m\'eame)\par
+\tab\tab DNS secondaire: 8.8.8.8\par
+\tab\b Machine Client (Windows 10):\b0\par
+\tab\tab IP: 192.168.1.20\par
+\tab\tab Masque r\'e9seau: 255.255.255.0\par
+\tab\tab Passerelle: 192.168.1.1\par
+\tab\tab DNS: 192.168.1.10 (celui du serveur)\par
+\tab\tab Puis joindre au domaine ( "Ce PC > Propri\'e9t\'e9s > Modifier les param\'e8tres")\par
+\tab\tab Changer le domaine pour "savard.local"\par
+\tab\tab Entrer le nom d'utilisateur et le mot de passe du r\'e9seau "savard.local"       \tab\tab                    ('Admin' et 'Admin001' d\'e9finis dans Virtual Box)\tab  \par
 - Installation et promotion du contr\'f4leur de domaine\par
 - Ajout du client Windows 10 au domaine\par
 - Cr\'e9ation des OU et des utilisateurs avec PowerShell\par
@@ -70,14 +84,14 @@ Les employ\'e9s du d\'e9partement (ex: employevente1 \'e0 employevente5)\par
 \b\fs32 5. Structure des r\'e9pertoires et droits d\rquote acc\'e8s\b0\fs22\par
 \par
 Dossiers partag\'e9s sur le serveur :\par
-{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\ventes"}}{\fldrslt{\\\\srv-ad\\partage\\ventes\ul0\cf0}}}}\f0\fs22  : Acc\'e8s total pour VentesMarketing\par
-{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\finance"}}{\fldrslt{\\\\srv-ad\\partage\\finance\ul0\cf0}}}}\f0\fs22  : Acc\'e8s Finance uniquement\par
-{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\sondages"}}{\fldrslt{\\\\srv-ad\\partage\\sondages\ul0\cf0}}}}\f0\fs22  : \'c9criture Sondages, lecture R-D\par
-{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partage\\\\direction"}}{\fldrslt{\\\\srv-ad\\partage\\direction\ul0\cf0}}}}\f0\fs22  : Direction seulement\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partages\\\\Ventes_Marketing"}}{\fldrslt{\\\\srv-ad\\partages\\Ventes_Marketing\ul0\cf0}}}}\f0\fs22  : Acc\'e8s total pour VentesMarketing\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partages\\\\Finances"}}{\fldrslt{\\\\srv-ad\\partages\\Finances\ul0\cf0}}}}\f0\fs22  : Acc\'e8s Finance uniquement\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partages\\\\Sondages"}}{\fldrslt{\\\\srv-ad\\partages\\Sondages\ul0\cf0}}}}\f0\fs22  : \'c9criture Sondages, lecture R-D\par
+{{\field{\*\fldinst{HYPERLINK "\\\\\\\\srv-ad\\\\partages\\\\Direction"}}{\fldrslt{\\\\srv-ad\\partages\\Direction\ul0\cf0}}}}\f0\fs22  : Direction seulement\par
 \par
 \b\fs28 6. GPO mises en place\b0\fs22\par
 \par
-Mot de passe expire aux 21 jours\par
+Mot de passe expire aux 21 jours (Minimum de 2 jours)\par
 R\'e9utilisation des 10 derniers interdite\par
 Longueur minimale : 8 caract\'e8res (9 pour Finance et R-D)\par
 Compte verrouill\'e9 apr\'e8s 3 tentatives infructueuses\par
@@ -98,10 +112,10 @@ Ce projet m\rquote a permis d\rquote apprendre \'e0 d\'e9ployer un environnement
 \pard\sa200\sl276\slmult1\qc\b Scripts PowerShell de cr\'e9ation des OU et utilisateurs\par
 
 \pard\sa200\sl276\slmult1\ul\b0 Cr\'e9ation des OU principales:\ulnone\par
-\f1\fs20 New-ADOrganizationalUnit -Name "VentesMarketing" -Path "DC=savard,DC=local"\par
-New-ADOrganizationalUnit -Name "RechercheDeveloppement" -Path "DC=savard,DC=local"\par
-New-ADOrganizationalUnit -Name "Finance" -Path "DC=savard,DC=local"\par
-New-ADOrganizationalUnit -Name "TechnologiesInformation" -Path "DC=savard,DC=local"\par
+\f1\fs20 New-ADOrganizationalUnit -Name "Ventes_Marketing" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "Recherche_Developpement" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "Finances" -Path "DC=savard,DC=local"\par
+New-ADOrganizationalUnit -Name "TI" -Path "DC=savard,DC=local"\par
 New-ADOrganizationalUnit -Name "Sondages" -Path "DC=savard,DC=local"\par
 New-ADOrganizationalUnit -Name "Direction" -Path "DC=savard,DC=local"\par
 \par
@@ -164,7 +178,7 @@ Add-ADGroupMember -Identity "G_Ventes" -Members chefventes, employeventes1, empl
 
 \pard\sl240\slmult1 Domaine : savard.local\par
 \f2\u9474?\f0\par
-\f2\u9500?\u9472?\u9472?\f0  OU : VentesMarketing\par
+\f2\u9500?\u9472?\u9472?\f0  OU : Ventes_Marketing\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefventes\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes1\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes2\par
@@ -172,7 +186,7 @@ Add-ADGroupMember -Identity "G_Ventes" -Members chefventes, employeventes1, empl
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeventes4\par
 \f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : employeventes5\par
 \f2\u9474?\f0\par
-\f2\u9500?\u9472?\u9472?\f0  OU : RechercheDeveloppement\par
+\f2\u9500?\u9472?\u9472?\f0  OU : Recherche_Developpement\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefrd\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd1\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd2\par
@@ -185,14 +199,14 @@ Add-ADGroupMember -Identity "G_Ventes" -Members chefventes, employeventes1, empl
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : employeerd9\par
 \f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : employeerd10\par
 \f2\u9474?\f0\par
-\f2\u9500?\u9472?\u9472?\f0  OU : Finance\par
+\f2\u9500?\u9472?\u9472?\f0  OU : Finances\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : cheffinance\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : commisfinance1\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : commisfinance2\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : commisfinance3\par
 \f2\u9474?\f0    \f2\u9492?\u9472?\u9472?\f0  Utilisateur : preposepaye\par
 \f2\u9474?\f0\par
-\f2\u9500?\u9472?\u9472?\f0  OU : TechnologiesInformation\par
+\f2\u9500?\u9472?\u9472?\f0  OU : TI\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : chefti\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : analysteti\par
 \f2\u9474?\f0    \f2\u9500?\u9472?\u9472?\f0  Utilisateur : techsupport1\par
